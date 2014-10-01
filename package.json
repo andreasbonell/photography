@@ -1,0 +1,22 @@
+{
+  "name": "afnyboilerplate",
+  "version": "0.1.0",
+  "devDependencies": {
+    "gulp": "^3.8.8",
+    "gulp-changed": "^1.0.0"
+  },
+  "contributors": [
+    {
+      "name": "Erik Erikson",
+      "email": "erik.erikson@analogfolk.com"
+    },
+    {
+      "name": "Andreas Bonell",
+      "email": "andreas.bonell@analogfolk.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@bitbucket.org:analogfolk-ondemand/nycanaint-boilerplate.git"
+  }
+}
