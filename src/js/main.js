@@ -1,5 +1,5 @@
 
-var $ = require('jquery');
+// var $ = require('jquery');
 
 var Test = {
 
