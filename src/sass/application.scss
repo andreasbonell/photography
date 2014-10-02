@@ -8,11 +8,40 @@
 // 
 //------------------------------------------------------------------------------
 
+@charset "UTF-8";
+
 // @import "bourbon";
 
-// @import "vendor/foundation/components/grid";
+//------------------------------------------------------------------------------
+// 
+// APPLLICATION CONTENTS
+//
+// SETTINGS
+// config.scss...............Globally-available variables and config.
+//
+// TOOLS
+// mixins.scss...............Useful mixins.
+//
+// GENERIC
+// z-index.scss..............One place for the application layer config.
+//
+// BASE
+// typography.scss...........Fonts and text styles.
+//
+// COMPONENTS
+// page-header.scss..........The main page header.
+// page-footer.scss..........The main page footer.
+// buttons.scss..............Button elements.
+// 
+//------------------------------------------------------------------------------
 
+@import "vendor/normalize";
+
+@import "application/mixins";
 @import "application/config";
 @import "application/z-index";
 @import "application/typography";
+@import "application/buttons";
+@import "application/page-header";
+@import "application/page-footer";
 
