@@ -21,15 +21,24 @@ const SRC  = './src';
 const DEST = './dist';
 const SRC_JS_DIRECTORY = SRC + '/js/';
 const DEST_JS_DIRECTORY = DEST + '/js/';
+const SRC_CSS_DIRECTORY = SRC + '/sass/';
+const DEST_CSS_DIRECTORY = DEST + '/css/';
 
 // Filenames
 const SRC_JS_FILENAME = 'main.js';
 const DEST_JS_FILENAME = SRC_JS_FILENAME;	// Same filename for both.
 
+const SRC_CSS_FILENAME = 'application.scss';
+const DEST_CSS_FILENAME = 'application.css';
+
 
 // Exact file locations
 const SRC_JS_FILEPATH = SRC_JS_DIRECTORY + SRC_JS_FILENAME;
 const DEST_JS_FILEPATH = DEST_JS_DIRECTORY + DEST_JS_FILENAME;
+
+const SRC_CSS_FILEPATH = SRC_CSS_DIRECTORY + SRC_CSS_FILENAME;
+const DEST_CSS_FILEPATH = DEST_CSS_DIRECTORY + DEST_CSS_FILENAME;
+
 
 
 // -----------------------------------------------------------------------------
@@ -51,6 +60,7 @@ var map                = require('map-stream');
 var concat             = require('gulp-concat');
 var ngAnnotate         = require('gulp-ng-annotate');
 var uglify             = require('gulp-uglify');
+var minifyCSS          = require('gulp-minify-css');
 
 
 // -----------------------------------------------------------------------------
@@ -65,17 +75,29 @@ var uglify             = require('gulp-uglify');
 // Task to run during development
 gulp.task('dev', function() {
 
-	runSequence([ 'scripts-dev']);
+	runSequence([ 'scripts-dev', 'styles-dev']);
 
 });
 
 // Task to run for distribution
 gulp.task('dist', function() {
 
+	runSequence([ 'scripts-dist', 'styles-dist']);
+
 });
 
 // Watch for changes and build for development
 gulp.task('watch', function() {
+
+	gulp.watch( 
+        SRC_CSS_DIRECTORY + '**/*.scss', 
+        [ 'styles-dev' ]
+    );
+
+    gulp.watch( 
+        SRC_JS_DIRECTORY + '**/*.js', 
+        [ 'scripts-dev' ]
+    );
 
 });
 
@@ -86,13 +108,36 @@ gulp.task('watch', function() {
 // 
 // What should actually be happening when you run a core task.
 //
+//
 // -----------------------------------------------------------------------------
 
 gulp.task( 'scripts-dev', function () {
 
+    runSequence('clean', 'js-hint', 'concat-js', 'browserify');
+
+} );
+
+
+gulp.task( 'styles-dev', function () {
+
+    runSequence('sass');
+
+} );
+
+gulp.task( 'scripts-dist', function () {
+
     runSequence('clean', 'js-hint', 'concat-js', 'browserify', 'dirty');
 
 } );
+
+
+gulp.task( 'styles-dist', function () {
+
+    runSequence('sass', 'minify-css');
+
+} );
+
+
 
 
 
@@ -214,8 +259,56 @@ gulp.task( 'dirty', function () {
 
 } );
 
-gulp.task('test', function () {
 
 
 
-});
+
+// ------------------------------------------------------------------------------
+//
+// Process Sass/SCSS files. Include Bourbon for mixins.
+//
+//
+// http://sass-lang.com
+// http://bourbon.io
+//
+// ------------------------------------------------------------------------------
+
+gulp.task( 'sass', function () {
+
+    return gulp.src( SRC_CSS_FILEPATH )
+            .pipe( sass( {
+                includePaths: bourbon.includePaths
+            } ) )
+            .pipe( gulp.dest( DEST_CSS_DIRECTORY ) );
+
+} );
+
+
+// ------------------------------------------------------------------------------
+//
+// Minify final stylesheets for lighter load.
+// https://developer.yahoo.com/performance/rules.html#minify
+//
+// NOTE:
+// Uncomment the uncss pipe if you want even more savings. It scans your DOM
+// to filter out any unused selectors, but isn't compatible with some projects.
+//
+// ------------------------------------------------------------------------------
+
+
+
+gulp.task( 'minify-css', function() {
+
+    return gulp.src( DEST_CSS_FILEPATH )
+        //  ENABLE FOR BEAST MODE
+        // .pipe( uncss( {
+        //     html: [ './www/index.html' ]  // Remove unused selectors
+        // } ) )
+        .pipe( minifyCSS( {
+          keepBreaks:true
+        } ) )
+        .pipe( gulp.dest( DEST_CSS_DIRECTORY ) );
+
+} );
+
+

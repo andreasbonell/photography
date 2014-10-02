@@ -16,3 +16,7 @@
 @import "application/z-index";
 @import "application/typography";
 
+body {
+	background: red;
+	font-family: $Helvetica;
+}
