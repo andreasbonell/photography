@@ -10,7 +10,7 @@
 
 @charset "UTF-8";
 
-// @import "bourbon";
+@import "bourbon";
 
 //------------------------------------------------------------------------------
 // 
@@ -35,7 +35,8 @@
 // 
 //------------------------------------------------------------------------------
 
-@import "vendor/normalize";
+@import "vendor/foundation/normalize";
+@import "vendor/foundation/foundation";
 
 @import "application/mixins";
 @import "application/config";
@@ -45,7 +46,7 @@
 @import "application/page-header";
 @import "application/page-footer";
 
-body {
-	background: red;
-	font-family: $Helvetica;
-}
+// Delete me when starting real work!
+@import "example/boilerplate";
+
+
