@@ -78,6 +78,12 @@ var changed            = require('gulp-changed');
 // -----------------------------------------------------------------------------
 
 
+// Task to run to initialize the project
+gulp.task('init', function() {
+
+    // Add your init tasks...
+});
+
 // Task to run during development
 gulp.task('dev', function() {
 
@@ -336,4 +342,19 @@ gulp.task( 'compress-images' , function() {
         .pipe(gulp.dest(DEST_IMG_DIRECTORY));
 
 });
+
+
+// ------------------------------------------------------------------------------
+//
+// Copy all of the app icons into the public folder
+//
+// ------------------------------------------------------------------------------
+
+// gulp.task('copy-icons', function() {
+//    
+//     // Change the dest directory as required
+//     return gulp.src(SRC + '/img/app-icons/*.*')
+//         .pipe(changed(DEST + '/'))
+//         .pipe(gulp.dest(DEST+ '/'));
+// });
 
