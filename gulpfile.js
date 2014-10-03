@@ -23,6 +23,9 @@ const SRC_JS_DIRECTORY = SRC + '/js/';
 const DEST_JS_DIRECTORY = DEST + '/js/';
 const SRC_CSS_DIRECTORY = SRC + '/sass/';
 const DEST_CSS_DIRECTORY = DEST + '/css/';
+const SRC_IMG_DIRECTORY = SRC + '/img/uncompressed/';
+const DEST_IMG_DIRECTORY = DEST + '/img/';
+
 
 // Filenames
 const SRC_JS_FILENAME = 'main.js';
@@ -61,6 +64,9 @@ var concat             = require('gulp-concat');
 var ngAnnotate         = require('gulp-ng-annotate');
 var uglify             = require('gulp-uglify');
 var minifyCSS          = require('gulp-minify-css');
+var imagemin           = require('gulp-imagemin');
+var pngcrush           = require('imagemin-pngcrush');
+var changed            = require('gulp-changed');
 
 
 // -----------------------------------------------------------------------------
@@ -113,7 +119,7 @@ gulp.task('watch', function() {
 
 gulp.task( 'scripts-dev', function () {
 
-    runSequence('clean', 'js-hint', 'concat-js', 'browserify');
+    runSequence(['clean', 'compress-images'], 'js-hint', 'concat-js', 'browserify');
 
 } );
 
@@ -126,7 +132,7 @@ gulp.task( 'styles-dev', function () {
 
 gulp.task( 'scripts-dist', function () {
 
-    runSequence('clean', 'js-hint', 'concat-js', 'browserify', 'dirty');
+    runSequence(['clean', 'compress-images'], 'js-hint', 'concat-js', 'browserify', 'dirty');
 
 } );
 
@@ -311,4 +317,23 @@ gulp.task( 'minify-css', function() {
 
 } );
 
+// ------------------------------------------------------------------------------
+//
+// Compress all images in the src uncompressed directory.
+//
+// ------------------------------------------------------------------------------
+
+
+gulp.task( 'compress-images' , function() {
+
+    return gulp.src(SRC_IMG_DIRECTORY + '**/*.*')
+        .pipe(changed(DEST_IMG_DIRECTORY))    // Only changed files
+        .pipe(imagemin({
+            progressive: true,
+            svgoPlugins: [{removeViewBox: false}],
+            use: [pngcrush()]
+        }))
+        .pipe(gulp.dest(DEST_IMG_DIRECTORY));
+
+});
 
