@@ -1,0 +1,3 @@
+# Ignoring Foundation during dev
+_foundation.scss
+foundation/*
